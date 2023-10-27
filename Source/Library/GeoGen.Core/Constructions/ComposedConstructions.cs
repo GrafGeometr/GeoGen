@@ -1,4 +1,5 @@
-﻿using static GeoGen.Core.ConfigurationObjectType;
+using System.Collections.Generic;
+using static GeoGen.Core.ConfigurationObjectType;
 using static GeoGen.Core.LooseObjectLayout;
 using static GeoGen.Core.PredefinedConstructionType;
 
@@ -326,6 +327,377 @@ namespace GeoGen.Core
         }
 
         /// <summary>
+        /// Tangent point or incircle with BC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction IncircleTangentPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var I = new ConstructedConfigurationObject(Incenter, A, B, C);
+                var D = new ConstructedConfigurationObject(PerpendicularProjectionOnLineFromPoints, I, B, C);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, D);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(IncircleTangentPoint), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The A-Humpty point of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction HumptyPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var orthocenter = new ConstructedConfigurationObject(Orthocenter, A, B, C);
+                var median = new ConstructedConfigurationObject(Median, A, B, C);
+                var projection = new ConstructedConfigurationObject(PerpendicularProjection, orthocenter, median);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, projection);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(HumptyPoint), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The A-Dumpty point of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction DumptyPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var circumcenter = new ConstructedConfigurationObject(Circumcenter, A, B, C);
+                var symedian = new ConstructedConfigurationObject(Symedian, A, B, C);
+                var projection = new ConstructedConfigurationObject(PerpendicularProjection, circumcenter, symedian);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, projection);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(DumptyPoint), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The A-Tangent lines intersection in triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction TangentLinesIntersection
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var tB = new ConstructedConfigurationObject(TangentLine, B, A, C);
+                var tC = new ConstructedConfigurationObject(TangentLine, C, A, B);
+                var intersection = new ConstructedConfigurationObject(IntersectionOfLines, tB, tC);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, intersection);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(TangentLinesIntersection), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The end of A-symedian of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction SymedianEnd
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var symedian = new ConstructedConfigurationObject(Symedian, A, B, C);
+                var S = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, symedian, B, C);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, S);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(SymedianEnd), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The isogonal conjugate of P in triangle ABC (signature P, {A, B, C}). 
+        /// </summary>
+        public static ComposedConstruction Isogonal
+        {
+            get
+            {
+                // Create objects
+                var P = new LooseConfigurationObject(Point);
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var aBisector = new ConstructedConfigurationObject(InternalAngleBisector, A, B, C);
+                var bBisector = new ConstructedConfigurationObject(InternalAngleBisector, B, A, C);
+
+                var Pa = new ConstructedConfigurationObject(ReflectionInLine, aBisector, P);
+                var Pb = new ConstructedConfigurationObject(ReflectionInLine, bBisector, P);
+
+                var S = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, Pa, B, Pb);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Quadrilateral, P, A, B, C, S);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Isogonal), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The isotomic conjugate of P in triangle ABC (signature P, {A, B, C}). 
+        /// </summary>
+        public static ComposedConstruction Isotomic
+        {
+            get
+            {
+                // Create objects
+                var P = new LooseConfigurationObject(Point);
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var Pa = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, P, B, C);
+                var Pb = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, B, P, A, C);
+
+                var Ma = new ConstructedConfigurationObject(Midpoint, B, C);
+                var Mb = new ConstructedConfigurationObject(Midpoint, A, C);
+
+                var Pa_ = new ConstructedConfigurationObject(PointReflection, Pa, Ma);
+                var Pb_ = new ConstructedConfigurationObject(PointReflection, Pb, Mb);
+
+                var S = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, Pa_, B, Pb_);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Quadrilateral, P, A, B, C, S);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Isotomic), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The antigonal conjugate of P in triangle ABC (signature P, {A, B, C}). 
+        /// </summary>
+        public static ComposedConstruction Antigonal
+        {
+            get
+            {
+                // Create objects
+                var P = new LooseConfigurationObject(Point);
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var Pa = new ConstructedConfigurationObject(ReflectionInLineFromPoints, P, B, C);
+                var Pb = new ConstructedConfigurationObject(ReflectionInLineFromPoints, P, A, C);
+
+                var S = new ConstructedConfigurationObject(SecondIntersectionOfTwoCircumcircles, C, A, Pb, B, Pa);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Quadrilateral, P, A, B, C, S);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Isotomic), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The middle of A-symedian of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction SymedianMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var symedian = new ConstructedConfigurationObject(Symedian, A, B, C);
+                var S = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, symedian, B, C);
+                var M = new ConstructedConfigurationObject(Midpoint, A, S);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, M);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(SymedianMiddle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The middle of A-median of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction MedianMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var M = new ConstructedConfigurationObject(Midpoint, B, C);
+                var P = new ConstructedConfigurationObject(Midpoint, A, M);
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, P);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(MedianMiddle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The end of A-bisector of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction BisectorEnd
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var bisector = new ConstructedConfigurationObject(InternalAngleBisector, A, B, C);
+                var P = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, bisector, B, C);
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, P);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(BisectorEnd), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The end of A-exbisector of triangle ABC (signature A, {B, C}). 
+        /// </summary>
+        public static ComposedConstruction ExternalBisectorEnd
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var bisector = new ConstructedConfigurationObject(ExternalAngleBisector, A, B, C);
+                var P = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, bisector, B, C);
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, P);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(ExternalBisectorEnd), configuration, parameters);
+            }
+        }
+
+
+        /// <summary>
         /// Reflection of point A in the perpendicular bisector of BC (signature A, {B, C}). 
         /// </summary>
         public static ComposedConstruction IsoscelesTrapezoidPoint
@@ -413,6 +785,186 @@ namespace GeoGen.Core
         }
 
         /// <summary>
+        /// Midpoint of bisector of angle BAC in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction BisectorMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var bisectorA = new ConstructedConfigurationObject(InternalAngleBisector, A, B, C);
+                var D = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, bisectorA, B, C);
+                var X = new ConstructedConfigurationObject(Midpoint, A, D);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(BisectorMiddle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Midpoint of exbisector of angle BAC in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction ExternalBisectorMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var bisectorA = new ConstructedConfigurationObject(ExternalAngleBisector, A, B, C);
+                var D = new ConstructedConfigurationObject(IntersectionOfLineAndLineFromPoints, bisectorA, B, C);
+                var X = new ConstructedConfigurationObject(Midpoint, A, D);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(ExternalBisectorMiddle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Midpoint of A-height  in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction HeightMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var proj = new ConstructedConfigurationObject(PerpendicularProjectionOnLineFromPoints, A, B, C);
+                var X = new ConstructedConfigurationObject(Midpoint, A, proj);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(HeightMiddle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// A-radius line in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction RadiusLine
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var O = new ConstructedConfigurationObject(Circumcenter, A, B, C);
+                var l = new ConstructedConfigurationObject(LineFromPoints, A, O);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, l);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(RadiusLine), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// End of A-radius line in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction RadiusLineEnd
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var O = new ConstructedConfigurationObject(Circumcenter, A, B, C);
+                var X = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, O, B, C);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(RadiusLineEnd), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Middle of A-radius line in triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction RadiusLineMiddle
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var O = new ConstructedConfigurationObject(Circumcenter, A, B, C);
+                var T = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, O, B, C);
+                var X = new ConstructedConfigurationObject(Midpoint, A, T);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(RadiusLineMiddle), configuration, parameters);
+            }
+        }
+
+
+        /// <summary>
         /// Centroid of triangle ABC (signature {A, B, C}).
         /// </summary>
         public static ComposedConstruction Centroid
@@ -440,6 +992,126 @@ namespace GeoGen.Core
                 return new ComposedConstruction(nameof(Centroid), configuration, parameters);
             }
         }
+
+        /// <summary>
+        /// Gergonne point of triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction Gergonne
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var Pa = new ConstructedConfigurationObject(IncircleTangentPoint, A, B, C);
+                var Pb = new ConstructedConfigurationObject(IncircleTangentPoint, B, A, C);
+                var Ge = new ConstructedConfigurationObject(IntersectionOfLinesFromPoints, A, Pa, B, Pb);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, Ge);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Gergonne), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Nagel point of triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction Nagel
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var Ge = new ConstructedConfigurationObject(Gergonne, A, B, C);
+                var N = new ConstructedConfigurationObject(Isotomic, Ge, A, B, C);
+                
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, N);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Nagel), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Lemoine point of triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction Lemoine
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var symedianA = new ConstructedConfigurationObject(Symedian, A, B, C);
+                var symedianB = new ConstructedConfigurationObject(Symedian, B, A, C);
+                var L = new ConstructedConfigurationObject(IntersectionOfLines, symedianA, symedianB);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, L);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Lemoine), configuration, parameters);
+            }
+        }
+
+        
+        /// <summary>
+        /// Centroid of triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction Centroid4
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var D = new LooseConfigurationObject(Point);
+                var ab = new ConstructedConfigurationObject(Midpoint, A, B);
+                var cd = new ConstructedConfigurationObject(Midpoint, C, D);
+                var G = new ConstructedConfigurationObject(Midpoint, ab, cd);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Quadrilateral, G);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 4)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Centroid), configuration, parameters);
+            }
+        }
+
+        
 
         /// <summary>
         /// Incircle of triangle ABC (signature {A, B, C}).
@@ -700,6 +1372,37 @@ namespace GeoGen.Core
 
                 // Create the actual construction
                 return new ComposedConstruction(nameof(Median), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The A-symedian of triangle ABC (signature A, {B, C}).
+        /// </summary>
+        public static ComposedConstruction Symedian
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var tb = new ConstructedConfigurationObject(TangentLine, B, A, C);
+                var tc = new ConstructedConfigurationObject(TangentLine, C, A, B);
+                var K = new ConstructedConfigurationObject(IntersectionOfLines, tb, tc);
+                var l = new ConstructedConfigurationObject(LineFromPoints, A, K);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, l);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Symedian), configuration, parameters);
             }
         }
 
