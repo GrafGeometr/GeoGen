@@ -386,6 +386,36 @@ namespace GeoGen.Core
         }
 
         /// <summary>
+        ///  
+        /// </summary>
+        public static ComposedConstruction HOPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var projection = new ConstructedConfigurationObject(PerpendicularProjectionOnLineFromPoints, A, B, C);
+                var M = new ConstructedConfigurationObject(Midpoint, B, C);
+                var X = new ConstructedConfigurationObject(PointReflection, projection, M);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, X);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(HOPoint), configuration, parameters);
+            }
+        }
+
+        /// <summary>
         /// The A-Dumpty point of triangle ABC (signature A, {B, C}). 
         /// </summary>
         public static ComposedConstruction DumptyPoint
@@ -1080,11 +1110,76 @@ namespace GeoGen.Core
             }
         }
 
+        /// <summary>
+        /// Poncelet point of quadrilateral ABCD (signature {A, B, C, D}).
+        /// </summary>
+        public static ComposedConstruction PonceletPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var D = new LooseConfigurationObject(Point);
+                var ab = new ConstructedConfigurationObject(Midpoint, A, B);
+                var bc = new ConstructedConfigurationObject(Midpoint, B, C);
+                var ca = new ConstructedConfigurationObject(Midpoint, C, A);
+                var ad = new ConstructedConfigurationObject(Midpoint, A, D);
+                var bd = new ConstructedConfigurationObject(Midpoint, B, D);
+                
+                var P = new ConstructedConfigurationObject(SecondIntersectionOfTwoCircumcircles, ab, bc, ca, ad, bd);
+
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Quadrilateral, P);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 4)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(PonceletPoint), configuration, parameters);
+            }
+        }
+        
+
+        /// <summary>
+        /// Feuerbach point of triangle ABC (signature {A, B, C}).
+        /// </summary>
+        public static ComposedConstruction FeuerbachPoint
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var I = new ConstructedConfigurationObject(Incenter, A, B, C);
+                var F = new ConstructedConfigurationObject(PonceletPoint, A, B, C, I);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, F);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 3)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(FeuerbachPoint), configuration, parameters);
+            }
+        }
+
+
         
         /// <summary>
         /// Centroid of triangle ABC (signature {A, B, C}).
         /// </summary>
-        public static ComposedConstruction Centroid4
+        public static ComposedConstruction QuadrilateralCentroid
         {
             get
             {
@@ -1107,7 +1202,7 @@ namespace GeoGen.Core
                 };
 
                 // Create the actual construction
-                return new ComposedConstruction(nameof(Centroid), configuration, parameters);
+                return new ComposedConstruction(nameof(QuadrilateralCentroid), configuration, parameters);
             }
         }
 
@@ -1169,6 +1264,8 @@ namespace GeoGen.Core
                 return new ComposedConstruction(nameof(Circumcenter), configuration, parameters);
             }
         }
+
+        
 
         /// <summary>
         /// The midpoint of arc opposite to BAC (signature A, {B, C}).
@@ -1520,6 +1617,37 @@ namespace GeoGen.Core
 
                 // Create the actual construction
                 return new ComposedConstruction(nameof(NinePointCircle), configuration, parameters);
+            }
+        }
+
+        /// <summary>
+        /// The A-Five-Point circle of triangle ABC (signature A, {B, C}).
+        /// </summary>
+        public static ComposedConstruction FPC
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var P = new ConstructedConfigurationObject(Orthocenter, A, B, C);
+                var Q = new ConstructedConfigurationObject(Midpoint, B, C);
+                var R = new ConstructedConfigurationObject(PerpendicularProjectionOnLineFromPoints, A, B, C);
+                var c = new ConstructedConfigurationObject(Circumcircle, P, Q, R);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, c);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(FPC), configuration, parameters);
             }
         }
     }
