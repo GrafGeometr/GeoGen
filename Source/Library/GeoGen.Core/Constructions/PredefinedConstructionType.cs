@@ -46,6 +46,21 @@
         Midpoint,
 
         /// <summary>
+        /// The inversion of point A about circle c (signature A, c).
+        /// </summary>
+        InversionOfPoint,
+
+        /// <summary>
+        /// The center of negative homothety of two circles c1, c2 (signature {c1, c2}).
+        /// </summary>
+        CenterOfNegativeHomothety,
+
+        /// <summary>
+        /// The center of positive homothety of two circles c1, c2 (signature {c1, c2}).
+        /// </summary>
+        CenterOfPositiveHomothety,
+
+        /// <summary>
         /// The perpendicular projection of point A on line l. (signature A, l)
         /// </summary>
         PerpendicularProjection,

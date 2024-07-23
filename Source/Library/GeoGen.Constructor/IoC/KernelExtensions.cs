@@ -23,6 +23,9 @@ namespace GeoGen.Constructor
             kernel.Bind<IComposedConstructorFactory>().ToFactory();
 
             // Bind the predefined constructors
+            kernel.Bind<IPredefinedConstructor>().To<CenterOfNegativeHomothetyConstructor>();
+            kernel.Bind<IPredefinedConstructor>().To<CenterOfPositiveHomothetyConstructor>();
+            kernel.Bind<IPredefinedConstructor>().To<InversionOfPointConstructor>();
             kernel.Bind<IPredefinedConstructor>().To<CenterOfCircleConstructor>();
             kernel.Bind<IPredefinedConstructor>().To<CircleWithCenterThroughPointConstructor>();
             kernel.Bind<IPredefinedConstructor>().To<CircumcircleConstructor>();

@@ -143,6 +143,66 @@ namespace GeoGen.Core
         }
 
         /// <summary>
+        /// Creates a <see cref="PredefinedConstructionType.InversionOfPoint"/> construction.
+        /// </summary>
+        /// <returns>The construction.</returns>
+        public static PredefinedConstruction InversionOfPoint
+        {
+            get
+            {
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Point),
+                    new ObjectConstructionParameter(Circle)
+                };
+
+                // Create the actual construction
+                return new PredefinedConstruction(PredefinedConstructionType.InversionOfPoint, parameters, Point);
+            }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="PredefinedConstructionType.CenterOfNegativeHomothety"/> construction.
+        /// </summary>
+        /// <returns>The construction.</returns>
+        public static PredefinedConstruction CenterOfNegativeHomothety
+        {
+            get
+            {
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Circle),
+                    new ObjectConstructionParameter(Circle)
+                };
+
+                // Create the actual construction
+                return new PredefinedConstruction(PredefinedConstructionType.CenterOfNegativeHomothety, parameters, Point);
+            }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="PredefinedConstructionType.CenterOfPositiveHomothety"/> construction.
+        /// </summary>
+        /// <returns>The construction.</returns>
+        public static PredefinedConstruction CenterOfPositiveHomothety
+        {
+            get
+            {
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                    new ObjectConstructionParameter(Circle),
+                    new ObjectConstructionParameter(Circle)
+                };
+
+                // Create the actual construction
+                return new PredefinedConstruction(PredefinedConstructionType.CenterOfPositiveHomothety, parameters, Point);
+            }
+        }
+
+        /// <summary>
         /// Creates a <see cref="PredefinedConstructionType.PerpendicularProjection"/> construction.
         /// </summary>
         /// <returns>The construction.</returns>

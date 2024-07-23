@@ -89,6 +89,14 @@ namespace GeoGen.AnalyticGeometry
 
         #region Public methods
 
+        public Point Invert(Point point)
+        {
+            var dist = Center.DistanceTo(point);
+            var newDist = Radius.Squared() / dist;
+            var vector = point - Center;
+            return Center + vector * newDist / dist;
+        }
+
         /// <summary>
         /// Checks if a given point lies on this circle.
         /// </summary>
