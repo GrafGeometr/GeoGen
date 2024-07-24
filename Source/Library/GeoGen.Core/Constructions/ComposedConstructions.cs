@@ -99,6 +99,37 @@ namespace GeoGen.Core
         }
 
         /// <summary>
+        /// Such point X that (AX; BC) = -1 (signature A, {B, C}).
+        /// </summary>
+        public static ComposedConstruction Harmonic
+        {
+            get
+            {
+                // Create objects
+                var A = new LooseConfigurationObject(Point);
+                var B = new LooseConfigurationObject(Point);
+                var C = new LooseConfigurationObject(Point);
+                var c = new ConstructedConfigurationObject(CircleWithDiameter, B, C);
+                var inversion = new ConstructedConfigurationObject(InversionOfPoint, A, c);
+                var line = new ConstructedConfigurationObject(LineFromPoints, B, C);
+                var result = new ConstructedConfigurationObject(ReflectionInLine, line, inversion);
+
+                // Create the actual configuration
+                var configuration = Configuration.DeriveFromObjects(Triangle, A, B, C, result);
+
+                // Create the parameters
+                var parameters = new List<ConstructionParameter>
+                {
+                     new ObjectConstructionParameter(Point),
+                     new SetConstructionParameter(new ObjectConstructionParameter(Point), 2)
+                };
+
+                // Create the actual construction
+                return new ComposedConstruction(nameof(Harmonic), configuration, parameters);
+            }
+        }
+
+        /// <summary>
         /// Perpendicular line to line AB passing through A (signature A, B).
         /// </summary>
         public static ComposedConstruction PerpendicularLineAtPointOfLine
